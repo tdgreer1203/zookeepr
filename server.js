@@ -52,6 +52,11 @@ app.get('/api/animals/:id', (req, res) => {
     }
 });
 
+app.post('/api/animals', (req, res) => {
+    console.log(req.body)
+    res.json(req.body);
+});
+
 app.listen(PORT, () => {
     console.log(`API server now on port ${PORT}!`);
 });
