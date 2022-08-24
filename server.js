@@ -44,6 +44,22 @@ function createNewAnimal(body, animalsArray) {
     return animal;
 }
 
+function validateAnimal(animal) {
+    if(!animal.name || typeof animal.name !== 'string') {
+        return false;
+    }
+    if(!animal.species || typeof animal.species !== 'string') {
+        return false;
+    }
+    if(!animal.diet || typeof animal.diet !== 'string') {
+        return false;
+    }
+    if(!animal.personalityTraits || !Array.isArray(animal.personalityTraits)) {
+        return false;
+    }
+    return true;
+}
+
 function findById(id, animalsArray) {
     const result = animalsArray.filter(animal => animal.id === id)[0];
     return result;
@@ -68,8 +84,12 @@ app.get('/api/animals/:id', (req, res) => {
 
 app.post('/api/animals', (req, res) => {
     req.body.id = animals.length.toString();
-    const animal = createNewAnimal(req.body, animals);
-    res.json(animal);
+    if(!validateAnimal(req.body)) {
+        res.status(400).send('The animal is not properly formatted.');
+    } else {
+        const animal = createNewAnimal(req.body, animals);
+        res.json(animal);
+    }
 });
 
 app.listen(PORT, () => {
