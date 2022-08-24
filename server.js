@@ -1,9 +1,14 @@
+const fs = require('fs');
+const path = require('path');
 const express = require('express');
 const { animals } = require('./data/animals');
 
 const PORT = process.env.PORT || 3001;
 
 const app = express();
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 function filterByQuery(query, animalsArray) {
     let personalityTraitsArray = [];
@@ -30,6 +35,15 @@ function filterByQuery(query, animalsArray) {
     return filteredResults;
 }
 
+function createNewAnimal(body, animalsArray) {
+    const animal = body;
+    animalsArray.push(animal);
+    fs.writeFileSync(path.join(__dirname, './data/animals.json'),
+    JSON.stringify({ animals: animalsArray}, null, 2)
+    );
+    return animal;
+}
+
 function findById(id, animalsArray) {
     const result = animalsArray.filter(animal => animal.id === id)[0];
     return result;
@@ -53,8 +67,9 @@ app.get('/api/animals/:id', (req, res) => {
 });
 
 app.post('/api/animals', (req, res) => {
-    console.log(req.body)
-    res.json(req.body);
+    req.body.id = animals.length.toString();
+    const animal = createNewAnimal(req.body, animals);
+    res.json(animal);
 });
 
 app.listen(PORT, () => {
