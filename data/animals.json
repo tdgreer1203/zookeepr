@@ -108,6 +108,19 @@
         "hungry"
       ],
       "id": "10"
+    },
+    {
+      "name": "Betty",
+      "species": "Dog",
+      "diet": "carnivore",
+      "personalityTraits": [
+        "hungry",
+        "zany",
+        "anxious",
+        "loving",
+        "goofy"
+      ],
+      "id": "11"
     }
   ]
 }
